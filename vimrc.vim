@@ -13,7 +13,7 @@ set ruler           " show the cursor position all the time
 set laststatus=2
 set visualbell t_vb=    " turn off error beep/flash
 set novisualbell    " turn off visual bell
-set nobackup        " do not keep a backup file
+"set nobackup        " do not keep a backup file
 "set number          " show line numbers
 set numberwidth=4   " line numbering takes up 5 spaces
 set ignorecase      " ignore case when searching
@@ -38,3 +38,41 @@ set nosmartindent   " turn off by default, enable for specific filetypes
 set nocindent       " turn off by default, enable for specific filetypes
 
 :nmap <C-N><C-N> :set invnumber<CR>
+
+syntax enable
+set background=dark
+"colorscheme solarized
+
+set mouse=a
+
+function! InitializeDirectories()
+  let separator = "."
+  let parent = $HOME 
+  let prefix = '.vim'
+  let dir_list = { 
+			  \ 'backup': 'backupdir', 
+			  \ 'views': 'viewdir', 
+			  \ 'swap': 'directory' }
+
+  for [dirname, settingname] in items(dir_list)
+	  let directory = parent . '/' . prefix . dirname . "/"
+	  if exists("*mkdir")
+		  if !isdirectory(directory)
+			  call mkdir(directory)
+		  endif
+	  endif
+	  if !isdirectory(directory)
+		  echo "Warning: Unable to create backup directory: " . directory
+		  echo "Try: mkdir -p " . directory
+	  else  
+          let directory = substitute(directory, " ", "\\\\ ", "")
+          exec "set " . settingname . "=" . directory
+	  endif
+  endfor
+endfunction
+call InitializeDirectories() 
+
+" Use local vimrc if available
+if filereadable(expand("~/.vimrc.local"))
+	source ~/.vimrc.local
+endif
