@@ -45,6 +45,11 @@ set background=dark
 
 set mouse=a
 
+map <C-e> :NERDTreeToggle<CR>:NERDTreeMirror<CR>
+map <leader>e :NERDTreeFind<CR>
+nmap <leader>nt :NERDTreeFind<CR>
+let g:NERDTreeWinSize = 60
+
 function! InitializeDirectories()
   let separator = "."
   let parent = $HOME 
